@@ -5,15 +5,19 @@ import styles from "../../styles/Evernote.module.scss";
 import { app, database } from "../../firebaseConfig";
 import { collection, addDoc } from "firebase/firestore";
 
+const db = collection(database, "notes");
 export default function NoteOperations() {
   const [isInputVisible, setInputVisible] = useState(false);
   const [noteTitle, setNoteTitle] = useState("");
+  const [noteDesc, setNoteDesc] = useState("");
 
   const inputToggle = () => {
     setInputVisible(!isInputVisible);
   };
 
-  const db = collection(database, "notes");
+  const addDesc = (value) => {
+    setNoteDesc(value);
+  };
 
   const saveNote = () => {
     addDoc(db, { noteTitle, noteDesc }).then(() => {
@@ -22,12 +26,6 @@ export default function NoteOperations() {
     });
 
     console.log("=====");
-  };
-
-  const [noteDesc, setNoteDesc] = useState("");
-
-  const addDesc = (value) => {
-    setNoteDesc(value);
   };
 
   return (
