@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import styles from "../../styles/Evernote.module.scss";
 import { app, database } from "../../firebaseConfig";
 import { collection, addDoc } from "firebase/firestore";
 
@@ -24,29 +23,27 @@ export default function NoteOperations() {
       setNoteTitle("");
       setNoteDesc("");
     });
-
-    console.log("=====");
   };
 
   return (
     <>
-      <div className={styles.btnContainer}>
-        <button className={styles.button} onClick={inputToggle}>
+      <div className="">
+        <button className="" onClick={inputToggle}>
           Add Note
         </button>
       </div>
       {isInputVisible ? (
-        <div className={styles.inputContainer}>
+        <div className="">
           <input
-            className={styles.input}
+            className=""
             placeholder="Enter the title"
             onChange={(e) => setNoteTitle(e.target.value)}
             value={noteTitle}
           />
-          <div className={styles.ReactQuill}>
+          <div className="">
             <ReactQuill onChange={addDesc} value={noteDesc} />
           </div>
-          <button className={styles.saveBtn} onClick={saveNote}>
+          <button className="" onClick={saveNote}>
             Save Note
           </button>
         </div>
