@@ -1,11 +1,16 @@
-import React, { useState, useEffect } from "react";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
-import { app, database } from "../../firebaseConfig";
-import { collection, addDoc, getDocs } from "firebase/firestore";
+import React, { useState } from "react";
+import { app, database } from "../firebaseConfig";
+import { collection, addDoc } from "firebase/firestore";
+import dynamic from "next/dynamic";
+
+const QuillNoSSRWrapper = dynamic(import("react-quill"), {
+  ssr: false,
+  loading: () => <p>Loading ...</p>,
+});
 
 const db = collection(database, "notes");
-export default function NoteOperations() {
+
+export default function NoteOperation({ children }) {
   const [isInputVisible, setInputVisible] = useState(false);
   const [noteTitle, setNoteTitle] = useState("");
   const [noteDesc, setNoteDesc] = useState("");
@@ -24,20 +29,6 @@ export default function NoteOperations() {
       setNoteDesc("");
     });
   };
-
-  const getNotes = () => {
-    getDocs(db).then((data) => {
-      console.log(
-        data.docs.map((item) => {
-          return { ...item.data(), id: item.id };
-        })
-      );
-    });
-  };
-
-  useEffect(() => {
-    getNotes();
-  }, []);
 
   return (
     <>
@@ -82,7 +73,13 @@ export default function NoteOperations() {
             value={noteTitle}
           />
           <div className="my-4 rounded-sm">
-            <ReactQuill onChange={addDesc} value={noteDesc} />
+            <QuillNoSSRWrapper
+              onChange={getText}
+              value={noteDesc}
+              theme="snow"
+
+              // clipboard: { matchVisual: false }
+            />
           </div>
 
           <button
@@ -109,6 +106,10 @@ export default function NoteOperations() {
       ) : (
         <></>
       )}
+
+      <div>
+        {children} {/* <NoteList notesArray={notesArray} /> */}
+      </div>
     </>
   );
 }

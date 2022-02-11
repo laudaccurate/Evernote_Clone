@@ -1,6 +1,10 @@
 import Head from "next/head";
 import Image from "next/image";
-import NoteOperations from "./components/NoteOperations";
+import dynamic from "next/dynamic";
+import NoteList from "../components/NoteList";
+import NoteOperations from "../components/NoteOperations";
+
+const NoteOperation = dynamic(() => import(NoteOperation), { ssr: false });
 
 export default function Home() {
   return (
@@ -14,7 +18,10 @@ export default function Home() {
       <main className="">
         <div className="grid grid-cols-2 mx-6 py-6">
           <div className="">
-            <NoteOperations />
+            <NoteOperations>
+              <NoteList />
+            </NoteOperations>
+            {/* <NoteList notesArray={["a"]} /> */}
           </div>
           <div className="">Right</div>
         </div>
