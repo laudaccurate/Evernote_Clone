@@ -5,6 +5,11 @@ module.exports = {
   ],
   theme: {
     extend: {},
+    fontFamily: {
+      nav: [],
+      sans: ["Roboto", "sans-serif"],
+      serif: ["Merriweather", "serif"],
+    },
   },
   plugins: [require("flowbite/plugin")],
 };
