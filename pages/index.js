@@ -47,8 +47,8 @@ export default function Home() {
       </Head>
 
       <main className="">
-        <div className="grid grid-cols-2 mx-6 py-6">
-          <div className="mx-5">
+        <div className="lg:grid lg:grid-cols-2 lg:mx-6 py-6">
+          <div className="mx-5 max-w-md">
             <NoteOperations
               notes={notesList}
               getSingleNote={getSingleNote}
