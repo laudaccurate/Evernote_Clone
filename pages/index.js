@@ -18,9 +18,7 @@ export default function Home() {
       <main className="">
         <div className="grid grid-cols-2 mx-6 py-6">
           <div className="">
-            <NoteOperations>
-              <NoteList />
-            </NoteOperations>
+            <NoteOperations />
             {/* <NoteList notesArray={["a"]} /> */}
           </div>
           <div className="">Right</div>
