@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { database } from "../firebaseConfig";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
 import dynamic from "next/dynamic";
 
 const QuillNoSSRWrapper = dynamic(import("react-quill"), {
@@ -49,7 +49,13 @@ export default function NoteDetail({ noteId }) {
     setNoteDesc(note.noteDesc);
   };
 
-  const deleteNote = () => {};
+  const deleteNote = (id) => {
+    const collectionById = doc(database, "notes", id);
+
+    deleteDoc(collectionById).then(() => {
+      window.location.reload();
+    });
+  };
 
   return (
     <>
@@ -78,7 +84,7 @@ export default function NoteDetail({ noteId }) {
             </button>
             <button
               className="mx-4 text-white bg-[#771B1B] hover:bg-[#7E1B1B] focus:ring-4 focus:ring-[#611B1B] font-medium rounded-sm text-sm px-5 py-2.5 text-center inline-flex items-center"
-              onClick={deleteNote}
+              onClick={() => deleteNote(note.id)}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
