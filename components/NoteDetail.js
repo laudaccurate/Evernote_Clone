@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { database } from "../firebaseConfig";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import dynamic from "next/dynamic";
 
 const QuillNoSSRWrapper = dynamic(import("react-quill"), {
@@ -22,8 +22,6 @@ export default function NoteDetail({ noteId }) {
       const singleNote = doc(database, "notes", noteId);
       const data = await getDoc(singleNote);
       setNote({ ...data.data(), id: data.id });
-      setNoteTitle(note.noteTitle);
-      setNoteDesc(note.noteDescription);
     }
   };
 
@@ -31,14 +29,27 @@ export default function NoteDetail({ noteId }) {
     getNoteFromId();
   }, [noteId]);
 
-  const editNote = () => {
-    console.log(isEditing);
+  const editNote = (id) => {
+    setLoading(true);
+    const collectionById = doc(database, "notes", id);
+
+    updateDoc(collectionById, {
+      noteTitle,
+      noteDesc,
+    }).then(() => {
+      setLoading(false);
+      window.location.reload();
+      getNoteFromId();
+    });
+  };
+
+  const getEditData = () => {
     setIsEditing(true);
+    setNoteTitle(note.noteTitle);
+    setNoteDesc(note.noteDesc);
   };
 
   const deleteNote = () => {};
-
-  const saveNote = () => {};
 
   return (
     <>
@@ -47,7 +58,7 @@ export default function NoteDetail({ noteId }) {
           <div className="inline-flex items-center my-6">
             <button
               className="mr-4 border border-gray-200 text-gray-900 bg-white hover:bg-gray-200 focus:ring-4 focus:ring-gray-300 font-medium rounded-sm text-sm px-5 py-2.5 text-center inline-flex items-center"
-              onClick={editNote}
+              onClick={getEditData}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -96,12 +107,12 @@ export default function NoteDetail({ noteId }) {
                 placeholder="New notes from my thoughts"
                 required
                 onChange={(e) => setNoteTitle(e.target.value)}
-                value={note.noteTitle}
+                value={noteTitle}
               />
               <div className="my-4 rounded-sm">
                 <QuillNoSSRWrapper
-                  // onChange={addDesc}
-                  value={note.noteDesc}
+                  onChange={setNoteDesc}
+                  value={noteDesc}
                   theme="snow"
                 />
               </div>
@@ -109,7 +120,7 @@ export default function NoteDetail({ noteId }) {
                 <button
                   disabled
                   type="button"
-                  class="py-2.5 px-5 mr-2 text-sm font-medium text-[#771B1B] bg-white rounded-sm border border-gray-200 hover:bg-gray-100 hover:text-[#771B1B] focus:z-10 focus:ring-2 focus:ring-[#771B1B] focus:text-[#771B1B] inline-flex items-center"
+                  class="py-2.5 px-5 mt-1 w-full text-sm font-medium text-[#771B1B] bg-white rounded-sm border border-gray-200 hover:bg-gray-100 hover:text-[#771B1B] focus:z-10 focus:ring-2 focus:ring-[#771B1B] focus:text-[#771B1B] inline-flex items-center justify-center"
                 >
                   <svg
                     role="status"
@@ -131,22 +142,22 @@ export default function NoteDetail({ noteId }) {
                 </button>
               ) : (
                 <button
-                  className="mt-2 text-white bg-[#771B1B] hover:bg-[#7E1B1B] focus:ring-4 focus:ring-[#611B1B] font-medium rounded-sm text-sm px-5 py-2.5 text-center inline-flex items-center"
-                  onClick={saveNote}
+                  className="mt-1 w-full text-white bg-[#771B1B] hover:bg-[#7E1B1B] focus:ring-4 focus:ring-[#611B1B] font-medium rounded-sm text-sm px-5 py-2.5 text-center inline-flex items-center justify-center"
+                  onClick={() => editNote(note.id)}
                 >
                   <svg
-                    className="w-6 h-6 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
                   >
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
-                    ></path>
+                      strokeWidth={2}
+                      d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                    />
                   </svg>
                   Update Note
                 </button>

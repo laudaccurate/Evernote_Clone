@@ -94,7 +94,7 @@ export default function NoteOperation({
             <button
               disabled
               type="button"
-              class="py-2.5 px-5 mr-2 text-sm font-medium text-[#771B1B] bg-white rounded-sm border border-gray-200 hover:bg-gray-100 hover:text-[#771B1B] focus:z-10 focus:ring-2 focus:ring-[#771B1B] focus:text-[#771B1B] inline-flex items-center"
+              class="py-2.5 px-5 mt-1 w-full text-sm font-medium text-[#771B1B] bg-white rounded-sm border border-gray-200 hover:bg-gray-100 hover:text-[#771B1B] focus:z-10 focus:ring-2 focus:ring-[#771B1B] focus:text-[#771B1B] inline-flex items-center justify-center"
             >
               <svg
                 role="status"
@@ -116,22 +116,22 @@ export default function NoteOperation({
             </button>
           ) : (
             <button
-              className="mt-2 text-white bg-[#771B1B] hover:bg-[#7E1B1B] focus:ring-4 focus:ring-[#611B1B] font-medium rounded-sm text-sm px-5 py-2.5 text-center inline-flex items-center"
+              className="mt-1 w-full text-white bg-[#771B1B] hover:bg-[#7E1B1B] focus:ring-4 focus:ring-[#611B1B] font-medium rounded-sm text-sm px-5 py-2.5 text-center inline-flex items-center justify-center"
               onClick={saveNote}
             >
               <svg
-                className="w-6 h-6 mr-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
               >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
-                ></path>
+                  strokeWidth={2}
+                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                />
               </svg>
               Save Note
             </button>
