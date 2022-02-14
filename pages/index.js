@@ -14,15 +14,18 @@ const db = collection(database, "notes");
 
 export default function Home() {
   const [notesList, setNotesList] = useState([]);
-  const [ID, setID] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [ID, setID] = useState("");
 
   const getNotes = () => {
+    setLoading(true);
     getDocs(db).then((data) => {
       setNotesList(
         data.docs.map((item) => {
           return { ...item.data(), id: item.id };
         })
       );
+      setLoading(false);
     });
   };
 
@@ -45,10 +48,15 @@ export default function Home() {
 
       <main className="">
         <div className="grid grid-cols-2 mx-6 py-6">
-          <div className="">
-            <NoteOperations notes={notesList} getSingleNote={getSingleNote} />
+          <div className="mx-5">
+            <NoteOperations
+              notes={notesList}
+              getSingleNote={getSingleNote}
+              getNotes={getNotes}
+              load={loading}
+            />
           </div>
-          <div className="">
+          <div className="mx-5 my-20">
             <NoteDetail noteId={ID} />
           </div>
         </div>
