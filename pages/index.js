@@ -1,12 +1,40 @@
 import Head from "next/head";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import NoteList from "../components/NoteList";
 import NoteOperations from "../components/NoteOperations";
+import { database } from "../firebaseConfig";
+import { collection, getDocs } from "firebase/firestore";
+import NoteDetail from "../components/NoteDetail";
 
 const NoteOperation = dynamic(() => import(NoteOperation), { ssr: false });
 
+const db = collection(database, "notes");
+
 export default function Home() {
+  const [notesList, setNotesList] = useState([]);
+  const [ID, setID] = useState({});
+
+  const getNotes = () => {
+    getDocs(db).then((data) => {
+      setNotesList(
+        data.docs.map((item) => {
+          return { ...item.data(), id: item.id };
+        })
+      );
+    });
+  };
+
+  useEffect(() => {
+    getNotes();
+  }, []);
+
+  const getSingleNote = (id) => {
+    console.log(id);
+    setID(id);
+  };
+
   return (
     <div className="">
       <Head>
@@ -18,10 +46,11 @@ export default function Home() {
       <main className="">
         <div className="grid grid-cols-2 mx-6 py-6">
           <div className="">
-            <NoteOperations />
-            {/* <NoteList notesArray={["a"]} /> */}
+            <NoteOperations notes={notesList} getSingleNote={getSingleNote} />
           </div>
-          <div className="">Right</div>
+          <div className="">
+            <NoteDetail noteId={ID} />
+          </div>
         </div>
       </main>
     </div>

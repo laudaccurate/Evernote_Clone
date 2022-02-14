@@ -11,11 +11,10 @@ const QuillNoSSRWrapper = dynamic(import("react-quill"), {
 
 const db = collection(database, "notes");
 
-export default function NoteOperation({ children }) {
+export default function NoteOperation({ getSingleNote, notes }) {
   const [isInputVisible, setInputVisible] = useState(false);
   const [noteTitle, setNoteTitle] = useState("");
   const [noteDesc, setNoteDesc] = useState("");
-  const [notesArray, setNotesArray] = useState([]);
 
   const inputToggle = () => {
     setInputVisible(!isInputVisible);
@@ -32,20 +31,6 @@ export default function NoteOperation({ children }) {
       getNotes();
     });
   };
-
-  const getNotes = () => {
-    getDocs(db).then((data) => {
-      setNotesArray(
-        data.docs.map((item) => {
-          return { ...item.data(), id: item.id };
-        })
-      );
-    });
-  };
-
-  useEffect(() => {
-    getNotes();
-  }, []);
 
   return (
     <>
@@ -94,8 +79,6 @@ export default function NoteOperation({ children }) {
               onChange={addDesc}
               value={noteDesc}
               theme="snow"
-
-              // clipboard: { matchVisual: false }
             />
           </div>
 
@@ -125,7 +108,7 @@ export default function NoteOperation({ children }) {
       )}
 
       <div>
-        <NoteList notesArray={notesArray} />
+        <NoteList notesArray={notes} getSingleNote={getSingleNote} />
       </div>
     </>
   );

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 
-export default function NoteList({ notesArray }) {
+export default function NoteList({ notesArray, getSingleNote }) {
   return (
     <>
-      <div className="p-4 max-w-md bg-white rounded-sm border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+      <div className="p-4 my-5 max-w-md bg-white rounded-sm border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-xl font-bold leading-none text-gray-900 dark:text-white">
             Recent Notes
@@ -22,7 +22,11 @@ export default function NoteList({ notesArray }) {
           >
             {notesArray.map((note, i) => {
               return (
-                <li key={note?.noteTitle || i} className="py-3 sm:py-4">
+                <li
+                  key={note?.noteTitle || i}
+                  className="py-3 sm:py-4 hover:cursor-pointer hover:bg-gray-200 hover:px-2"
+                  onClick={() => getSingleNote(note.id)}
+                >
                   <div className="flex items-center space-x-4">
                     <div className="flex-shrink-0">
                       <svg
@@ -41,13 +45,13 @@ export default function NoteList({ notesArray }) {
                       </svg>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900 truncate dark:text-white">
+                      <p className="text-md font-medium text-gray-900 truncate dark:text-white">
                         {note?.noteTitle}
                       </p>
-                      <p
-                        className="text-sm text-gray-500 truncate dark:text-gray-400"
+                      {/* <p
+                        className="text-sm font-extralight text-gray-400 truncate dark:text-gray-300"
                         dangerouslySetInnerHTML={{ __html: note.noteDesc }}
-                      ></p>
+                      ></p> */}
                     </div>
                     <div className="inline-flex items-center text-base font-semibold text-gray-400 dark:text-white">
                       <svg
